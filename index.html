@@ -13,15 +13,18 @@ body {
   color: white;
 }
 
-/* Header tipo Spotify */
+/* HEADER estilo Spotify */
 .header {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
   padding: 30px 20px;
   background: linear-gradient(to bottom, #1db954, #121212);
 }
 
 .cover {
-  width: 220px;
-  border-radius: 12px;
+  width: 200px;
+  border-radius: 10px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.6);
   transition: transform 0.3s;
 }
@@ -30,17 +33,26 @@ body {
   transform: scale(1.05);
 }
 
-.title {
-  margin-top: 15px;
-  font-size: 26px;
-  font-weight: bold;
+.info {
+  text-align: left;
 }
 
-.subtitle {
+.label {
+  font-size: 12px;
+  color: #ddd;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+.artist {
   color: #b3b3b3;
 }
 
-/* Lista */
+/* LISTA */
 .container {
   padding: 20px;
 }
@@ -62,7 +74,7 @@ body {
   text-align: left;
 }
 
-/* Botón */
+/* BOTÓN */
 button {
   background: #1db954;
   border: none;
@@ -74,7 +86,7 @@ button {
   cursor: pointer;
 }
 
-/* Barra progreso */
+/* PROGRESO */
 .progress {
   height: 4px;
   background: #333;
@@ -95,26 +107,30 @@ button {
 
 <div class="header">
   <img src="cover.jpg" class="cover" id="cover">
-  <div class="title">Nuestro EP 💚</div>
-  <div class="subtitle">Para ti</div>
+
+  <div class="info">
+    <div class="label">EP</div>
+    <div class="title">Nuestro EP 💚</div>
+    <div class="artist">José María Colombres</div>
+  </div>
 </div>
 
 <div class="container">
 
   <div class="song">
-    <div class="song-title">Cómo empezó</div>
+    <div class="song-title">En Un Solo Día</div>
     <button onclick="playSong(0)" id="btn0">▶</button>
   </div>
   <div class="progress"><div class="progress-bar" id="bar0"></div></div>
 
   <div class="song">
-    <div class="song-title">Lo que siento</div>
+    <div class="song-title">Desde Cuando</div>
     <button onclick="playSong(1)" id="btn1">▶</button>
   </div>
   <div class="progress"><div class="progress-bar" id="bar1"></div></div>
 
   <div class="song">
-    <div class="song-title">Lo que viene</div>
+    <div class="song-title">Dedicatoria</div>
     <button onclick="playSong(2)" id="btn2">▶</button>
   </div>
   <div class="progress"><div class="progress-bar" id="bar2"></div></div>
@@ -143,7 +159,6 @@ function playSong(index) {
 
   let cover = document.getElementById("cover");
 
-  // Pausar todo
   audios.forEach((a, i) => {
     if (i !== index) {
       a.pause();
@@ -182,7 +197,5 @@ function playSong(index) {
 }
 </script>
 
-</body>
-</html>
 </body>
 </html>
