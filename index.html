@@ -2,41 +2,187 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Mi Playlist</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nuestro EP 💚</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #121212;
+  color: white;
+}
+
+/* Header tipo Spotify */
+.header {
+  padding: 30px 20px;
+  background: linear-gradient(to bottom, #1db954, #121212);
+}
+
+.cover {
+  width: 220px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  transition: transform 0.3s;
+}
+
+.cover.playing {
+  transform: scale(1.05);
+}
+
+.title {
+  margin-top: 15px;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.subtitle {
+  color: #b3b3b3;
+}
+
+/* Lista */
+.container {
+  padding: 20px;
+}
+
+.song {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.song:hover {
+  background: #1a1a1a;
+}
+
+.song-title {
+  text-align: left;
+}
+
+/* Botón */
+button {
+  background: #1db954;
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Barra progreso */
+.progress {
+  height: 4px;
+  background: #333;
+  margin-top: 5px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #1db954;
+}
+</style>
 </head>
-<body style="background-color:#121212; color:white; font-family:Arial; text-align:center;">
 
-<h1>🎶 Mis canciones especiales</h1>
+<body>
 
-<!-- Canción 1 -->
-<h3>En un solo día</h3>
-<iframe style="border-radius:12px"
-src="https://open.spotify.com/embed/track/0wXuerDYiBnERgIpbb3JBR"
-width="300"
-height="380"
-frameBorder="0"
-allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
-</iframe>
+<div class="header">
+  <img src="cover.jpg" class="cover" id="cover">
+  <div class="title">Nuestro EP 💚</div>
+  <div class="subtitle">Para ti</div>
+</div>
 
-<!-- Canción 2 -->
-<h3>Desde cuando</h3>
-<iframe style="border-radius:12px"
-src="https://open.spotify.com/embed/track/5VGlqQANWDKJFl0MBG3sg2"
-width="300"
-height="380"
-frameBorder="0"
-allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
-</iframe>
+<div class="container">
 
-<!-- Canción 3 (dedicatoria personalizada) -->
-<h3>💌 Dedicatoria</h3>
-<iframe style="border-radius:12px"
-src="https://open.spotify.com/embed/track/3ZFTkvIE7kyPt6Nu3PEa7V"
-width="300"
-height="380"
-frameBorder="0"
-allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
-</iframe>
+  <div class="song">
+    <div class="song-title">Cómo empezó</div>
+    <button onclick="playSong(0)" id="btn0">▶</button>
+  </div>
+  <div class="progress"><div class="progress-bar" id="bar0"></div></div>
 
+  <div class="song">
+    <div class="song-title">Lo que siento</div>
+    <button onclick="playSong(1)" id="btn1">▶</button>
+  </div>
+  <div class="progress"><div class="progress-bar" id="bar1"></div></div>
+
+  <div class="song">
+    <div class="song-title">Lo que viene</div>
+    <button onclick="playSong(2)" id="btn2">▶</button>
+  </div>
+  <div class="progress"><div class="progress-bar" id="bar2"></div></div>
+
+</div>
+
+<audio id="audio0" src="song1.mp3"></audio>
+<audio id="audio1" src="song2.mp3"></audio>
+<audio id="audio2" src="song3.mp3"></audio>
+
+<script>
+let current = null;
+
+function playSong(index) {
+  let audios = [
+    document.getElementById("audio0"),
+    document.getElementById("audio1"),
+    document.getElementById("audio2")
+  ];
+
+  let buttons = [
+    document.getElementById("btn0"),
+    document.getElementById("btn1"),
+    document.getElementById("btn2")
+  ];
+
+  let cover = document.getElementById("cover");
+
+  // Pausar todo
+  audios.forEach((a, i) => {
+    if (i !== index) {
+      a.pause();
+      a.currentTime = 0;
+      buttons[i].innerHTML = "▶";
+      document.getElementById("bar" + i).style.width = "0%";
+    }
+  });
+
+  let audio = audios[index];
+
+  if (current === index && !audio.paused) {
+    audio.pause();
+    buttons[index].innerHTML = "▶";
+    cover.classList.remove("playing");
+    current = null;
+    return;
+  }
+
+  audio.play();
+  buttons[index].innerHTML = "⏸";
+  cover.classList.add("playing");
+  current = index;
+
+  audio.ontimeupdate = () => {
+    let percent = (audio.currentTime / audio.duration) * 100;
+    document.getElementById("bar" + index).style.width = percent + "%";
+  };
+
+  audio.onended = () => {
+    buttons[index].innerHTML = "▶";
+    cover.classList.remove("playing");
+    document.getElementById("bar" + index).style.width = "0%";
+    current = null;
+  };
+}
+</script>
+
+</body>
+</html>
 </body>
 </html>
