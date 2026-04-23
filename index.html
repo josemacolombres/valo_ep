@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nuestro EP 💚</title>
+<title>Tu Cumple EP</title>
 
 <style>
 body {
@@ -11,28 +11,62 @@ body {
   font-family: Arial, sans-serif;
   background: #121212;
   color: white;
+  overflow-x: hidden;
 }
 
-/* HEADER estilo Spotify */
+/* FONDO dinámico */
+.bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('cover.jpg') center/cover no-repeat;
+  filter: blur(60px) brightness(0.4);
+  z-index: -1;
+}
+
+/* HEADER */
 .header {
   display: flex;
   align-items: flex-end;
   gap: 20px;
   padding: 30px 20px;
-  background: linear-gradient(to bottom, #1db954, #121212);
+  background: linear-gradient(to bottom, rgba(29,185,84,0.9), #121212);
 }
 
+/* COVER */
 .cover {
   width: 200px;
   border-radius: 10px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-  transition: transform 0.3s;
 }
 
-.cover.playing {
-  transform: scale(1.05);
+/* VINILO */
+.vinyl {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #111 40%, #000 70%);
+  z-index: -1;
+  left: 20px;
+  top: 30px;
+  transform: scale(0.9);
+  opacity: 0;
 }
 
+.vinyl.playing {
+  animation: spin 3s linear infinite;
+  opacity: 1;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg) scale(0.9); }
+  to { transform: rotate(360deg) scale(0.9); }
+}
+
+/* INFO */
 .info {
   text-align: left;
 }
@@ -43,7 +77,7 @@ body {
 }
 
 .title {
-  font-size: 32px;
+  font-size: 42px; /* MÁS GRANDE */
   font-weight: bold;
   margin: 5px 0;
 }
@@ -61,17 +95,13 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px;
+  padding: 14px;
   border-radius: 8px;
   margin-bottom: 10px;
 }
 
 .song:hover {
-  background: #1a1a1a;
-}
-
-.song-title {
-  text-align: left;
+  background: rgba(255,255,255,0.05);
 }
 
 /* BOTÓN */
@@ -100,12 +130,36 @@ button {
   width: 0%;
   background: #1db954;
 }
+
+/* 📱 RESPONSIVE */
+@media (max-width: 600px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .cover {
+    width: 180px;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+
+  .vinyl {
+    display: none;
+  }
+}
 </style>
 </head>
 
 <body>
 
+<div class="bg"></div>
+
 <div class="header">
+  <div class="vinyl" id="vinyl"></div>
   <img src="cover.jpg" class="cover" id="cover">
 
   <div class="info">
@@ -118,19 +172,19 @@ button {
 <div class="container">
 
   <div class="song">
-    <div class="song-title">En Un Solo Día</div>
+    <div>En Un Solo Día</div>
     <button onclick="playSong(0)" id="btn0">▶</button>
   </div>
   <div class="progress"><div class="progress-bar" id="bar0"></div></div>
 
   <div class="song">
-    <div class="song-title">Desde Cuando</div>
+    <div>Desde Cuando</div>
     <button onclick="playSong(1)" id="btn1">▶</button>
   </div>
   <div class="progress"><div class="progress-bar" id="bar1"></div></div>
 
   <div class="song">
-    <div class="song-title">Dedicatoria</div>
+    <div>Dedicatoria</div>
     <button onclick="playSong(2)" id="btn2">▶</button>
   </div>
   <div class="progress"><div class="progress-bar" id="bar2"></div></div>
@@ -157,7 +211,7 @@ function playSong(index) {
     document.getElementById("btn2")
   ];
 
-  let cover = document.getElementById("cover");
+  let vinyl = document.getElementById("vinyl");
 
   audios.forEach((a, i) => {
     if (i !== index) {
@@ -173,14 +227,14 @@ function playSong(index) {
   if (current === index && !audio.paused) {
     audio.pause();
     buttons[index].innerHTML = "▶";
-    cover.classList.remove("playing");
+    vinyl.classList.remove("playing");
     current = null;
     return;
   }
 
   audio.play();
   buttons[index].innerHTML = "⏸";
-  cover.classList.add("playing");
+  vinyl.classList.add("playing");
   current = index;
 
   audio.ontimeupdate = () => {
@@ -190,7 +244,7 @@ function playSong(index) {
 
   audio.onended = () => {
     buttons[index].innerHTML = "▶";
-    cover.classList.remove("playing");
+    vinyl.classList.remove("playing");
     document.getElementById("bar" + index).style.width = "0%";
     current = null;
   };
